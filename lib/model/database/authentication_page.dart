@@ -19,7 +19,7 @@ class AuthenticationPage extends StatelessWidget {
         builder:(context, snapshot){
           //checking if the user logged in
           if(snapshot.hasData){
-            return HomePage(onTap: () {  },);
+            return HomePage();
 
           }
           //User not logged

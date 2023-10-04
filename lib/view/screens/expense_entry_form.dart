@@ -1,13 +1,15 @@
+import 'package:expense_tracker/model/expense_item.dart';
+import 'package:expense_tracker/view/components/cancel_button.dart';
+import 'package:expense_tracker/view/components/save_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
 class ExpenseEntryForm extends StatefulWidget {
-  final Function()? onTap;
   const ExpenseEntryForm({
     super.key,
-    required this.onTap
+
   });
 
   @override
@@ -18,6 +20,8 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
   final _formKey = GlobalKey<FormState>();
   late Color myColor;//creating a universal color for the app
   late Size mediaSize;// the app according to screen size
+  final items = ['Accounting','Business','Clothing','Drinks','Education','Food','Health' ];
+  String? value;
 
   //text editing controllers
   final itemNameController = TextEditingController();
@@ -30,12 +34,31 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
   }
   //save info
   void save (){
+    //create Expense Item
+    ExpenseItem newExpense = ExpenseItem(
+        name: itemNameController.text,
+        amount: amountController.text,
+        date: DateTime.now(),
+    );
+    //add the item
 
   }
   //cancel form
   void cancel (){
 
   }
+  //Dropdown menu method
+  DropdownMenuItem<String> buildMenuItem(String item)=> DropdownMenuItem(
+      value: item,
+      child: Text(
+        item,
+        style: const TextStyle(fontSize: 20),
+      ),
+
+  );
+
+
+
   @override
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
@@ -72,11 +95,12 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
                   keyboardType: TextInputType.name,
                   validator: (value){
                     if(value == null || value.isEmpty){
-                      return 'Enter Item into Textfield.';
+                      return 'Enter Item into Text field.';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 15,),
                 TextFormField(
                   controller: amountController,
                   decoration: const InputDecoration(labelText: 'Amount',
@@ -85,11 +109,12 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
                   keyboardType: TextInputType.number,
                   validator: (value){
                     if(value == null || value.isEmpty){
-                      return 'Enter Item into Textfield.';
+                      return 'Enter Item into Text-field.';
                     }
                     return null;
                   },
                 ),
+                const SizedBox(height: 15,),
                 TextFormField(
                   controller: dateController,
                   decoration: const InputDecoration(hintText: 'Date',
@@ -98,32 +123,41 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
                   keyboardType: TextInputType.datetime,
                   validator: (value){
                     if(value == null || value.isEmpty){
-                      return 'Enter Item into Textfield.';
+                      return 'Enter Item into Text-field.';
                     }
                     return null;
                   },
                 ),
-                TextFormField(
-                  controller: categoryController,
-                  decoration: const InputDecoration(hintText: 'Category',
-                      border: OutlineInputBorder(),
+                const SizedBox(height: 15,),
+            //dropdown button
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: myColor)
                   ),
-                  keyboardType: TextInputType.name,
-                  validator: (value){
-                    if(value == null || value.isEmpty){
-                      return 'Enter Item into Textfield.';
-                    }
-                    return null;
-                  },
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                        icon: Icon(Icons.arrow_drop_down, color: myColor,),
+                        iconSize: 38,
+                        isExpanded: true,
+                        value: value,
+                        items: items.map(buildMenuItem).toList(),
+                        onChanged: (value){
+                          setState(() => this.value = value);
+                        }),
+                  ),
                 ),
-                MaterialButton(
-                    onPressed: save,
-                    child: const Text('Save'),
-                ),
-                MaterialButton(
-                  onPressed: cancel,
-                  child: const Text('Cancel'),
-                )
+                const SizedBox(height: 15,),
+
+                SaveButton(
+                    onTap: save,
+                    text: 'Save'),
+                const SizedBox(height: 10,),
+                CancelButton(
+                    onTap: cancel,
+                    text: 'Cancel'),
+
               ],
             ),
           ),

@@ -9,10 +9,10 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
 class HomePage extends StatefulWidget {
-  final Function()? onTap;
+
   const HomePage({
      super.key,
-    required this.onTap
+
    });
 
   @override
@@ -20,20 +20,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //declare universal colour
   late Color myColor;
+
+  //declare current index
   int _currentIndex = 0;
 
-  var onTap;
+  //declare longitude and latitude values
+  late String lat;
+  late String long;
 
-//function for switching screens
+  //function for switching screens
   void switchScreens(index){
     setState(() {
       _currentIndex = index;
     });
   }
-   final List _screens = [
+  final List _screens = [
     //home screen
-      HomePage(onTap: () {  },),
+    const HomePage(),
     //statistics screen
     const StatsScreen(),
     //settings screen
@@ -42,11 +47,8 @@ class _HomePageState extends State<HomePage> {
 
   void signOut(){
     FirebaseAuth.instance.signOut();
-}
-//Add Expense method
-  addExpense(){
-    ExpenseEntryForm(onTap: onTap);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +81,11 @@ class _HomePageState extends State<HomePage> {
         ),
         const SizedBox(height: 20,),
         AddExpenseButton(
-            onTap: addExpense,
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> const ExpenseEntryForm()));
+            },
             text: 'Expense',
+
         ),
         const SizedBox(height: 20,),
         const ExpenseList(),

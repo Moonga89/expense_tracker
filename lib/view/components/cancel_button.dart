@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-class AddExpenseButton extends StatelessWidget {
+class CancelButton extends StatelessWidget {
   final Function()? onTap;
   final String text;
-    AddExpenseButton({
+   CancelButton({
     super.key,
     required this.onTap,
     required this.text
+
   });
   late Color myColor;
-
   @override
   Widget build(BuildContext context) {
     myColor = Theme.of(context).primaryColor;
@@ -17,7 +17,7 @@ class AddExpenseButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
-        margin: const EdgeInsets.symmetric(horizontal: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 120),
         decoration: BoxDecoration(color: myColor,
           borderRadius: BorderRadius.circular(8),
         ),
@@ -33,4 +33,3 @@ class AddExpenseButton extends StatelessWidget {
     );
   }
 }
-
