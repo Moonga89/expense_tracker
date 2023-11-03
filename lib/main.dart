@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child)=> MaterialApp(
     title: 'Your App Name',
     theme: ThemeData(
-    primarySwatch: Colors.blue,
+    primarySwatch: Colors.grey,
     brightness:
     Provider.of<AppSettingsModel>(context).isDarkMode
     ? Brightness.dark

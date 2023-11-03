@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+final _formKey = GlobalKey<FormState>();
 //EMAIL/USERNAME TEXT FORM FIELD
 class UsernameTextFormField extends StatefulWidget {
 
@@ -22,6 +22,7 @@ class _UsernameTextFormFieldState extends State<UsernameTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: TextFormField(
@@ -40,6 +41,12 @@ class _UsernameTextFormFieldState extends State<UsernameTextFormField> {
               hintStyle: TextStyle(color: Colors.grey[500]),
 
             ),
+
+            // if name textformfield is less than 3 characters give an error
+            validator: (name) => name!.length < 3 ? 'name should be '
+                'at least 3 characters': null,
+            // auto validates without clicking the login button.
+            autovalidateMode: AutovalidateMode.onUserInteraction ,
           ),
         )
     );

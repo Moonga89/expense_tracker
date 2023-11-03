@@ -1,4 +1,6 @@
+import 'package:expense_tracker/controller/bottom_navigation.dart';
 import 'package:expense_tracker/model/app_settings.dart';
+import 'package:expense_tracker/view/components/log_out_button.dart';
 //import 'package:expense_tracker/view/themes/theme_provider.dart';
 //import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +61,14 @@ class SettingsPage extends StatelessWidget {
               },
             ),
           ),
+          const SizedBox(height: 320),
+          Row(
+            children: [
+              LogOutButton(
+                  onTap: signOut,
+                  text: 'Logout'),
+            ],
+          )
         ],
       ),
     );

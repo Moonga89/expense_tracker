@@ -21,4 +21,5 @@ class AppSettingsModel extends ChangeNotifier {
     dateFormat = newFormat;
     notifyListeners();
   }
+
 }

@@ -27,28 +27,45 @@ class _NavState extends State<Nav> {
     myColor = Theme.of(context).primaryColor;
     return Scaffold(
       // Bottom Navigation Bar
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.purple,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          indicatorColor: Colors.purple,
+          labelTextStyle: MaterialStateProperty.all(
+            const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
-          NavigationDestination(
-            icon: Icon(Icons.stacked_bar_chart),
-            label: 'Statistics ',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
-        ],
-        onDestinationSelected: (int index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        selectedIndex: currentPageIndex,
+        ),
+        child: NavigationBar(
+          height: 60,
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          animationDuration: const Duration(seconds: 2),
+          backgroundColor: Colors.purple,
+          destinations: const <Widget>[
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.stacked_bar_chart_outlined),
+              selectedIcon: Icon(Icons.stacked_bar_chart),
+              label: 'Statistics ',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.settings_outlined),
+              selectedIcon: Icon(Icons.settings_rounded),
+              label: 'Settings',
+            ),
+          ],
+
+          // get index and store inside our state
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          selectedIndex: currentPageIndex,
+        ),
+
       ),
       body: <Widget>[
         const HomePage(),   // Display Home screen at index 0.

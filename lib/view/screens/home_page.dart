@@ -58,6 +58,10 @@ class _HomePageState extends State<HomePage> {
   void signOut(){
     FirebaseAuth.instance.signOut();
   }
+  // delete expense
+  void deleteExpense(ExpenseItem expense) {
+    Provider.of<ExpenseData>(context, listen: false).deleteExpense(expense);
+  }
   void save() {
     String amount =
         '${amountController.text}.${ngweController.text}';
@@ -166,10 +170,11 @@ class _HomePageState extends State<HomePage> {
               name: value.getAllExpenseList()[index].name,
               amount: value.getAllExpenseList()[index].amount,
               dateTime: value.getAllExpenseList()[index].dateTime,
-              deleteTapped: (BuildContext) {},
+              deleteTapped: (p0)=> deleteExpense(
+                  value.getAllExpenseList()[index]),
             ),separatorBuilder: (
-              BuildContext context, int index)=> const Divider(
-            color: Colors.white,
+              BuildContext context, int index)=> Divider(
+             color: Theme.of(context).colorScheme.primary,
           ),
 
               /* const ExpenseList(),

@@ -17,6 +17,7 @@ class ExpenseTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // delete button
     return Slidable(
       endActionPane: ActionPane(
         motion: const StretchMotion(),
@@ -25,20 +26,25 @@ class ExpenseTile extends StatelessWidget {
             onPressed: deleteTapped,
             icon: Icons.delete,
             backgroundColor: Colors.red,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10),
           ),
+          const SizedBox(width: 5,),
           SlidableAction(
             onPressed: deleteTapped,
             icon: Icons.edit,
             backgroundColor: Colors.blue,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(10),
           ),
         ],
       ),
-      child: ListTile(
-        title: Text(name),
-        subtitle: Text('${dateTime.day}/${dateTime.month}/${dateTime.year}'),
-        trailing: Text('$amount ZMW'),
+      child: Padding(
+        padding: const EdgeInsets.all(1.0),
+        child: ListTile(
+          tileColor: Theme.of(context).colorScheme.background,
+          title: Text(name),
+          subtitle: Text('${dateTime.day}/${dateTime.month}/${dateTime.year}'),
+          trailing: Text('$amount ZMW'),
+        ),
       ),
     );
   }
