@@ -18,7 +18,7 @@ class AddExpenseButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(20),
         margin: const EdgeInsets.symmetric(horizontal: 30),
-        decoration: BoxDecoration(color: myColor,
+        decoration: BoxDecoration(color: Colors.purple,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(

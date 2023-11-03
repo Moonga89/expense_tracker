@@ -1,3 +1,4 @@
+import 'package:expense_tracker/controller/data/expense_data.dart';
 import 'package:expense_tracker/model/expense_item.dart';
 import 'package:expense_tracker/view/components/cancel_button.dart';
 import 'package:expense_tracker/view/components/save_button.dart';
@@ -5,6 +6,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:expense_tracker/view/screens/home_page.dart';
+
 
 class ExpenseEntryForm extends StatefulWidget {
   const ExpenseEntryForm({
@@ -33,19 +37,23 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
     FirebaseAuth.instance.signOut();
   }
   //save info
-  void save (){
-    //create Expense Item
+  void save() {
+    String amount =
+        '${amountController.text}.${amountController.text}';
     ExpenseItem newExpense = ExpenseItem(
-        name: itemNameController.text,
-        amount: amountController.text,
-        date: DateTime.now(),
+      name: itemNameController.text,
+      amount: amount,
+      dateTime: DateTime.now(),
     );
-    //add the item
+    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
 
+    Navigator.pop(context);
+    clear();
   }
   //cancel form
   void cancel (){
-
+    Navigator.pop(context);
+    clear();
   }
   //Dropdown menu method
   DropdownMenuItem<String> buildMenuItem(String item)=> DropdownMenuItem(
@@ -57,6 +65,12 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
 
   );
 
+  void clear(){
+    itemNameController.clear();
+    amountController.clear();
+    dateController.clear();
+    categoryController.clear();
+  }
 
 
   @override
@@ -151,7 +165,9 @@ class _ExpenseEntryFormState extends State<ExpenseEntryForm> {
                 const SizedBox(height: 15,),
 
                 SaveButton(
-                    onTap: save,
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomePage()));
+                    },
                     text: 'Save'),
                 const SizedBox(height: 10,),
                 CancelButton(

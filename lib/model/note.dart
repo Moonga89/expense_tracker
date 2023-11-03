@@ -1,19 +1,25 @@
 class Note {
-  int? id;
+  int? id, amount;
   String name;
-  String description;
+  DateTime dateTime;
+  String category;
 
   Note({
     this.id,
+    this.amount,
     required this.name,
-    required this.description,
+    required this.dateTime,
+    required this.category,
+
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'amount': amount,
       'name': name,
-      'description': description,
+      'dateTime': dateTime,
+      'category': category,
     };
   }
 
@@ -21,7 +27,9 @@ class Note {
     return Note(
       id: map['id'],
       name: map['name'],
-      description: map['description'],
+      amount: map['amount'],
+      dateTime: map['dateTime'],
+      category: map['category'],
     );
   }
 }

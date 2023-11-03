@@ -1,4 +1,5 @@
 
+import 'package:expense_tracker/controller/nav.dart';
 import 'package:expense_tracker/view/screens//home_page.dart';
 import 'package:expense_tracker/view/screens/login_or_register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,7 +20,7 @@ class AuthenticationPage extends StatelessWidget {
         builder:(context, snapshot){
           //checking if the user logged in
           if(snapshot.hasData){
-            return HomePage();
+            return Nav();
 
           }
           //User not logged

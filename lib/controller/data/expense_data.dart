@@ -1,117 +1,94 @@
-import 'package:expense_tracker/controller/dateTime/date_time_helper.dart';
-import 'package:expense_tracker/model/expense_item.dart';
+import 'package:flutter/widgets.dart';
+import '../../model/expense_item.dart';
+import '../dateTime/date_time_helper.dart';
+import 'hive_database.dart';
 
-class ExpenseData {
-
-  //list of all expenses
+class ExpenseData extends ChangeNotifier {
+  // list of all expenses
   List<ExpenseItem> overallExpenseList = [];
-  //get Expense list
+
+  // get expense list
   List<ExpenseItem> getAllExpenseList() {
     return overallExpenseList;
   }
-  //add new expense.
-  void addNewExpense (ExpenseItem newExpense){
-    overallExpenseList.add(newExpense);//adding new expense to the overall expense list.
+
+  // prepare data to display that already exists when user opens app
+  final db = HiveDataBase();// create database object
+  void prepareData() {
+    // if the data exists, get it
+    if (db.readData().isNotEmpty) {
+      overallExpenseList = db.readData();
+    }
   }
 
-  //delete expense
-  void deleteExpense (ExpenseItem expense){
-    overallExpenseList.remove(expense);//deleting expense from the overall list
+  // Function responsible for adding a new expense
+  void addNewExpense(ExpenseItem newExpense) {
+    overallExpenseList.add(newExpense);
+
+    notifyListeners();
+    db.saveData(overallExpenseList);// save data
   }
 
-  //get weekday (mon, tue, wed,) etc from the datetime object
-  String getDayName(DateTime dateTime){
-    switch(dateTime.weekday){
+  // Function responsible for deleting an expense
+  void deleteExpense(ExpenseItem deleteExpense) {
+    overallExpenseList.remove(deleteExpense);
+
+    notifyListeners();
+    db.saveData(overallExpenseList);// save data
+  }
+
+  // get weekday (mon, tue, wed, etc) from a dateTime object
+  String getDayName(DateTime dateTime) {
+    switch (dateTime.weekday) {
       case 1:
-        return 'Mon';
+        return 'Monday';
       case 2:
-        return 'Tue';
+        return 'Tuesday';
       case 3:
-        return 'Wed';
+        return 'Wednesday';
       case 4:
-        return 'Thu';
+        return 'Thursday';
       case 5:
-        return 'Fri';
+        return 'Friday';
       case 6:
-        return 'Sat';
+        return 'Saturday';
       case 7:
-        return 'Sun';
+        return 'Sunday';
       default:
         return '';
     }
   }
-
-  //get date from start of the week (Sunday)
-  DateTime startOfWeekDate(){
+  // get the date for the start of the week ( sunday )
+  DateTime startOfWeekDate() {
     DateTime? startOfWeek;
 
-    //get today's date
+  // get today's date
     DateTime today = DateTime.now();
 
-    //go backwards from today to find Sunday
-    for(int i = 0; i < 7; i++){
-      if(getDayName(today.subtract(Duration(days: i))) == 'Sun'){
+  //  go back wards from today to find sunday
+    for (int i = 0; i < 7; i++) {
+      if (getDayName(today.subtract(Duration(days: i))) == 'Sunday') {
         startOfWeek = today.subtract(Duration(days: i));
       }
     }
+
     return startOfWeek!;
   }
 
-  /*
+  Map<String, double> calculateDailyExpenseSummary() {
+    Map<String, double> dailyExpenseSummary = {};
 
-  convert overall list of expenses into daily summery
-
-  e.g.
-
-  overallExpenseList =
-
-  [
-
-  [ food, 03/02/2023, K15 ]
-  [ clothes, 03/02/2023, K15 ]
-  [ hat, 03/02/2023, K15 ]
-  [ car, 03/02/2023, K15 ]
-  [ rent, 03/02/2023, K15 ]
-
-  ]
-
-  ->
-
-  dailyExpenseSummery =
-
-  [
-
-  [2023/01/30: K14]
-  [2023/01/31: K14]
-  [2023/02/01: K14]
-  [2023/02/02: K14]
-  [2023/02/03: K14]
-
-
-  ]
-
-  */
-// will come in handy when displaying our statistic
-  Map<String, double> calculateDailyExpenseSummery(){
-    Map<String, double> dailyExpenseSummery = {
-      //date (yyyymmdd): amountTotalForDay
-    };
-
-    for(var expense in overallExpenseList){
-      String date = convertDateTimeToString(expense.date);
+    for (var expense in overallExpenseList) {
+      String date = convertDateTimeToString(expense.dateTime as DateTime);
       double amount = double.parse(expense.amount);
 
-      if(dailyExpenseSummery.containsKey(date)){
-        double currentAmount = dailyExpenseSummery[date]!;
-        currentAmount += amount;
-        dailyExpenseSummery[date] = currentAmount;
-
-      }else {
-        dailyExpenseSummery.addAll({date: amount});
+      if (dailyExpenseSummary.containsKey(date)) {
+        double currentAmount = dailyExpenseSummary[date]!;
+      } else {
+        dailyExpenseSummary.addAll({date: amount});
       }
     }
-    return dailyExpenseSummery;
+
+    return dailyExpenseSummary;
   }
-
-
 }
